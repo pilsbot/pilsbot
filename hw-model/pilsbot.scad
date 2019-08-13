@@ -13,7 +13,7 @@ getriebe_l = 200;
 rad_d = 300;
 rad_w = 50;
 rad_freiheit = 20;
-entfernung_achse_kiste = rad_d/2 + rad_freiheit
+entfernung_achse_kiste = rad_d/2 + rad_freiheit;
 
 achse_d = 30;
 achse_l = pilsbot_w - 2*rad_w - 10;
@@ -88,7 +88,7 @@ module antrieb()
 		//halterung
 		color("#a0a0a0")
 		translate([5, 5, getriebe_h])
-			cube([getriebe_l-10, getriebe_w-10, rad_d/2 + rad_freiheit - getriebe_h/2]);
+			cube([getriebe_l-10, getriebe_w-10, entfernung_achse_kiste - getriebe_h/2]);
 	}
 	
 	achse();
@@ -149,7 +149,9 @@ module sackermannAufhaengung()
 	color("green")
 	translate([-gelenk/2, achslaenge, -gelenk/2])
 		cube(gelenk);
-	cylinder(d1=gelenk, d2=gelenk*1.4, h = 
+	color("#30C090")
+	translate([0, achslaenge+gelenk/2, gelenk/2])
+		cylinder(d1=gelenk, d2=gelenk*1.4, h = entfernung_achse_kiste - gelenk/2);
 }
 
 module lenkungSackermann()
@@ -157,11 +159,29 @@ module lenkungSackermann()
 	
 	
 	translate([0, -achse_l/2, 0])
-		!sackermannAufhaengung();
-
-	rotate([180, 0, 0]) translate([0, -achse_l/2, 0])
 		sackermannAufhaengung();
 
+	mirror([0, 1, 0]) translate([0, -achse_l/2, 0])
+		sackermannAufhaengung();
+
+}
+
+module battery()
+{
+	battery_w = 200;
+	battery_h = 200;
+	battery_l = 400;
+	
+	color("#A0A0A0")
+		cube([battery_w, battery_l, battery_h]);
+	//plus
+	color("red")
+	translate([battery_w/5, 40, battery_h])
+		cylinder(d1 = 20, d2=18, h= 20);
+	//minus
+	color("black")
+	translate([4*battery_w/5, 40, battery_h])
+		cylinder(d1 = 20, d2=18, h= 20);
 }
 
 module hauptbox()
@@ -177,6 +197,8 @@ module hauptbox()
 		translate([wandstaerke, wandstaerke, wandstaerke])
 			cube([pilsbot_l-wandstaerke*2, pilsbot_w-wandstaerke*2, pilsbot_h]);
 	}
+	translate([0, wandstaerke, wandstaerke])
+		battery();
 }
 
 
