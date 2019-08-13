@@ -13,6 +13,7 @@ getriebe_l = 200;
 rad_d = 300;
 rad_w = 50;
 rad_freiheit = 20;
+entfernung_achse_kiste = rad_d/2 + rad_freiheit
 
 achse_d = 30;
 achse_l = pilsbot_w - 2*rad_w - 10;
@@ -65,7 +66,7 @@ module achsenhalter()
 	width = achse_d+10;
 	thickness = 9;
 	translate([-width/2, -thickness, 0])
-		cube([width, thickness, rad_d/2 + rad_freiheit]);
+		cube([width, thickness, entfernung_achse_kiste]);
 	rotate([90, 0, 0])
 		cylinder(h=thickness, d = width);
 	color("red")
@@ -103,7 +104,7 @@ module antrieb()
 		achsenhalter();
 }
 
-module lenkung()
+module lenkungHackermann()
 {
 	entfernung = 200;
 	wheelbase = achse_vorne-achse_hinten;
@@ -137,6 +138,32 @@ module lenkung()
 		achsenhalter();
 }
 
+module sackermannAufhaengung()
+{
+	achslaenge	= 20;
+	gelenk		= 50;
+	rad();
+	translate([0, achslaenge/2, 0])
+		achse(achslaenge);
+	//unten
+	color("green")
+	translate([-gelenk/2, achslaenge, -gelenk/2])
+		cube(gelenk);
+	cylinder(d1=gelenk, d2=gelenk*1.4, h = 
+}
+
+module lenkungSackermann()
+{
+	
+	
+	translate([0, -achse_l/2, 0])
+		!sackermannAufhaengung();
+
+	rotate([180, 0, 0]) translate([0, -achse_l/2, 0])
+		sackermannAufhaengung();
+
+}
+
 module hauptbox()
 {
 //	pilsbot_w = 1000;
@@ -159,4 +186,4 @@ translate([achse_hinten, pilsbot_w/2, -rad_d/2 - rad_freiheit])
 	antrieb();
 
 translate([achse_vorne, pilsbot_w/2, -rad_d/2 - rad_freiheit])
-	lenkung();
+	lenkungSackermann();
