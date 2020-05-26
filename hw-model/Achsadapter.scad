@@ -2,7 +2,7 @@ $fa = $preview ? 10 : 4;
 $fs = $preview ? 5 : 0.25;
 
 module achse(){
-	cylinder(d=16.8, h=20);
+	cylinder(d=17, h=20);
 	translate([0,0,20]){
 		//cylinder(d=15.5, h=50);
 		cylinder(d=16.5, h=50);
