@@ -7,6 +7,6 @@ thickness = 5;
 
 difference()
 {
-	cylinder(d = d_aussen+thickness, h = l);
+	cylinder(d = d_aussen+2*thickness, h = l);
 	cylinder(d = d_aussen, h = l+1);
 }
