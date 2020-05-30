@@ -1,7 +1,7 @@
 $fa = $preview ? 8 : 4;
 $fs = $preview ? 3 : 0.25;
 
-d_aussen = 25 -1;
+d_aussen = 25 +1;
 l = 30;
 thickness = 5;
 

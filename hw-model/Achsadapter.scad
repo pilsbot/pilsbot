@@ -2,7 +2,8 @@ $fa = $preview ? 8 : 4;
 $fs = $preview ? 3 : 0.25;
 
 module achse(){
-	color("brown")cylinder(d=17, h=22);
+	//color("brown")cylinder(d=17, h=22);
+	color("brown")cylinder(d=17.4, h=22);
 	translate([0,0,20]){
 		//cylinder(d=15.5, h=50);
 		cylinder(d=16, h=50);
