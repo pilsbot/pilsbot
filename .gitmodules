@@ -4,3 +4,6 @@
 [submodule "logo"]
 	path = logo
 	url = git@github.com:pilsbot/logo.git
+[submodule "sw/head_mcu"]
+	path = sw/head_mcu
+	url = git@github.com:pilsbot/head_mcu.git
