@@ -152,7 +152,9 @@ if(outer)
 							cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
 					}
 				}
-				translate([0,0,-.5])cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d);
+				//anti-turn hole
+				translate([0,0,-.5])
+					cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d);
 			}
 			
 			//expansion
@@ -193,8 +195,12 @@ if(outer)
 			//translate([0, 0, -hole_offs-2*rohrversatz]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
 			//	h = 2*outer_tube_inner_d, center=true);
 		}
-		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 90])
+		//small anti-turn hole
+		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 90]) hull()
+		{
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
+			translate([0, -10, 0]) cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
+		}
 		
 		//schnittsicht
 		if(schnittsicht)

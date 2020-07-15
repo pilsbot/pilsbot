@@ -57,7 +57,7 @@ module holder(extra_distance = 0)
 	difference()
 	{
 		mums_dim = [hole_to_wall+extra_distance+hole_d/2,hole_distance+hole_d, thickness+switch_dim.z+2];
-		translate([hole_to_wall/2,hole_distance-mums_dim.y/2,0])
+		translate([hole_to_wall/2,hole_distance-mums_dim.y/2,0.2])
 		{
 			cube(mums_dim);
 		}
