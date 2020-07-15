@@ -17,11 +17,11 @@ top = 2*hole_distance;
 
 screw_d = 3;
 
-module plate()
+module plate(extra_distance = 0)
 {
 	color("grey") linear_extrude(thickness) difference()
 	{
-		square([right, top]);
+		square([right+extra_distance, top]);
 		translate([hole_to_wall, hole_distance/2])
 		{
 			circle(d=hole_d);
@@ -51,27 +51,33 @@ module switch()
 	}
 }
 
-difference()
-{
-	mums_dim = [hole_to_wall+hole_d/2,hole_distance+hole_d, thickness+switch_dim.z+2];
-	translate([hole_to_wall/2,hole_distance-mums_dim.y/2,0])
-	{
-		cube(mums_dim);
-	}
-	
-	translate([hole_to_wall, hole_distance/2, -.5])
-		cylinder(d = screw_d, h = mums_dim.z+1);
-	
-	translate([hole_to_wall, hole_distance*1.5, -.5])
-		cylinder(d = screw_d, h = mums_dim.z+1);
 
-	translate([right - switch_dim.x,hole_distance - switch_dim.y/2, thickness])
+module holder(extra_distance = 0)
+{
+	difference()
 	{
-		hull() switch();
-		pins_dim = [switch_dim.x-2*1.5, switch_dim.y-2*0.5, switch_dim.z/2+1];
-		translate([-pins_dim.x, switch_dim.y/pins_dim.y/2])
-			cube(pins_dim);
+		mums_dim = [hole_to_wall+extra_distance+hole_d/2,hole_distance+hole_d, thickness+switch_dim.z+2];
+		translate([hole_to_wall/2,hole_distance-mums_dim.y/2,0])
+		{
+			cube(mums_dim);
+		}
+		
+		translate([hole_to_wall, hole_distance/2, -.5])
+			cylinder(d = screw_d, h = mums_dim.z+1);
+		
+		translate([hole_to_wall, hole_distance*1.5, -.5])
+			cylinder(d = screw_d, h = mums_dim.z+1);
+
+		translate([right - switch_dim.x+extra_distance,hole_distance - switch_dim.y/2, thickness])
+		{
+			hull() switch();
+			pins_dim = [switch_dim.x+extra_distance, switch_dim.y-2*0.5, switch_dim.z/2+1];
+			translate([-pins_dim.x, switch_dim.y/pins_dim.y/2])
+				cube(pins_dim);
+		}
+		#plate(extra_distance);
 	}
-	#plate();
 }
 
+holder(1);
+mirror([1,0,0]) holder(3);

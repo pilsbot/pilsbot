@@ -29,7 +29,10 @@ screw_safety_margin_d = 4;
 screw_safety_margin_h = 0;
 lessen_slew = 1-0.5;
 
-schnittsicht = true;
+schnittsicht = false;
+
+outer = true;
+inner = false;
 
 //calculated
 pot_turn_h = pot_part_h - pot_gewinde_h;
@@ -106,91 +109,95 @@ module poti_rotated()
 
 
 //inner
-i_h = 2*hole_offs;
-color ("orange") difference()
+if(inner)
 {
-	union()
+	i_h = 2*hole_offs;
+	color ("orange") difference()
 	{
-		//lower cylinder
-		translate([0, 0, - i_h + .5*hole_offs]) cylinder(d = inner_tube_inner_d, h = 1.5*hole_offs);
-		//kegel
-		cylinder(d1 = inner_tube_inner_d, d2 = pot_d + 2*ws, h = pot_turn_h-hole_offs+inner_tube_hole_d/2);
+		union()
+		{
+			//lower cylinder
+			translate([0, 0, - i_h + .5*hole_offs]) cylinder(d = inner_tube_inner_d, h = 1.5*hole_offs);
+			//kegel
+			cylinder(d1 = inner_tube_inner_d, d2 = pot_d + 2*ws, h = pot_turn_h-hole_offs+inner_tube_hole_d/2);
+		}
+		//hole
+		translate([0, 0, - hole_offs]) rotate([90])
+			//intentionaly big hole for more play (reducing wear on poti?)
+			cylinder(d = inner_tube_hole_d, h = outer_tube_inner_d + 10, center=true);
+		poti_rotated();
+		
+		//schnittsicht
+		if(schnittsicht)
+			translate([0,0, -35]) cube([50, 50, 50]);
 	}
-	//hole
-	translate([0, 0, - hole_offs]) rotate([90])
-		//intentionaly big hole for more play (reducing wear on poti?)
-		cylinder(d = inner_tube_hole_d, h = outer_tube_inner_d + 10, center=true);
-	poti_rotated();
-	
-	//schnittsicht
-	if(schnittsicht)
-		translate([0,0, -35]) cube([50, 50, 50]);
 }
-
 
 //Outer dome
-difference(){
-	color("brown") 
-	{
-		//lower ring
-		translate([0,0,-(rohrversatz+hole_offs+outer_tube_hole_d)]) difference()
+if(outer)
+{
+	difference(){
+		color("brown") 
 		{
-			union()
+			//lower ring
+			translate([0,0,-(rohrversatz+hole_offs+outer_tube_hole_d)]) difference()
 			{
-				cylinder(h=3*outer_tube_hole_d, d = outer_tube_inner_d-ws);
-				num_bebbels = 10;
-				for(i = [0:num_bebbels])
+				union()
 				{
-					rotate([0, 0, i*(360/num_bebbels)]) translate([(outer_tube_inner_d-ws)/2, 0, 0])
-						cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
+					cylinder(h=3*outer_tube_hole_d, d = outer_tube_inner_d-ws);
+					num_bebbels = 10;
+					for(i = [0:num_bebbels])
+					{
+						rotate([0, 0, i*(360/num_bebbels)]) translate([(outer_tube_inner_d-ws)/2, 0, 0])
+							cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
+					}
 				}
+				translate([0,0,-.5])cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d);
 			}
-			translate([0,0,-.5])cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d);
+			
+			//expansion
+			expansion_h = rohrversatz-(hole_offs+screw_safety_margin_h+inner_tube_hole_d/2);
+			translate([0,0,-(rohrversatz)]) difference()
+			{
+				cylinder(d1=outer_tube_inner_d-ws, d2 = outer_tube_inner_d +2*(screw_safety_margin_d+ws),
+					h=expansion_h);
+				translate([0,0,expansion_h/2]) 
+					cylinder(d1=inner_tube_outer_d, d2 = outer_tube_inner_d +2*screw_safety_margin_d,
+						h=expansion_h/2);
+				cylinder(d=inner_tube_outer_d, h=expansion_h);
+			}
+			//middle
+			middle_h = 2*(rohrversatz-(expansion_h+hole_offs));
+			translate([0,0,-rohrversatz+expansion_h]) difference()
+			{
+				cylinder(d = outer_tube_inner_d +2*(screw_safety_margin_d+ws), h=middle_h);
+				cylinder(d = outer_tube_inner_d +2*(screw_safety_margin_d), h=middle_h+1);
+			}
+			//inpansion (lol)
+			top_h = pot_gesamt_h-(hole_offs+inner_tube_hole_d/2+ws)+(rohrversatz-expansion_h-middle_h);
+			translate([0,0,-rohrversatz+expansion_h+middle_h]) difference()
+			{
+				dimension = outer_tube_inner_d +2*(screw_safety_margin_d);
+				cylinder(d1 = dimension+2*ws, d2 = dimension*lessen_slew,
+					h=top_h);
+				cylinder(d1 = dimension, d2 = pot_d_low,	//for better 3d-printability
+					h=top_h-ws);
+			}
 		}
+		poti_rotated();
+		//screw_slit
+		hull()
+		{
+			translate([0, 0, -hole_offs]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
+				h = 2*outer_tube_inner_d, center=true);
+			//translate([0, 0, -hole_offs-2*rohrversatz]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
+			//	h = 2*outer_tube_inner_d, center=true);
+		}
+		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 90])
+			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
 		
-		//expansion
-		expansion_h = rohrversatz-(hole_offs+screw_safety_margin_h+inner_tube_hole_d/2);
-		translate([0,0,-(rohrversatz)]) difference()
-		{
-			cylinder(d1=outer_tube_inner_d-ws, d2 = outer_tube_inner_d +2*(screw_safety_margin_d+ws),
-				h=expansion_h);
-			translate([0,0,expansion_h/2]) 
-				cylinder(d1=inner_tube_outer_d, d2 = outer_tube_inner_d +2*screw_safety_margin_d,
-					h=expansion_h/2);
-			cylinder(d=inner_tube_outer_d, h=expansion_h);
-		}
-		//middle
-		middle_h = 2*(rohrversatz-(expansion_h+hole_offs));
-		translate([0,0,-rohrversatz+expansion_h]) difference()
-		{
-			cylinder(d = outer_tube_inner_d +2*(screw_safety_margin_d+ws), h=middle_h);
-			cylinder(d = outer_tube_inner_d +2*(screw_safety_margin_d), h=middle_h+1);
-		}
-		//inpansion (lol)
-		top_h = pot_gesamt_h-(hole_offs+inner_tube_hole_d/2+ws)+(rohrversatz-expansion_h-middle_h);
-		translate([0,0,-rohrversatz+expansion_h+middle_h]) difference()
-		{
-			dimension = outer_tube_inner_d +2*(screw_safety_margin_d);
-			cylinder(d1 = dimension+2*ws, d2 = dimension*lessen_slew,
-				h=top_h);
-			cylinder(d1 = dimension, d2 = pot_d_low,	//for better 3d-printability
-				h=top_h-ws);
-		}
+		//schnittsicht
+		if(schnittsicht)
+			translate([0,0, -35]) cube([50, 50, 50]);
 	}
-	poti_rotated();
-	//screw_slit
-	hull()
-	{
-		translate([0, 0, -hole_offs]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
-			h = 2*outer_tube_inner_d, center=true);
-		//translate([0, 0, -hole_offs-2*rohrversatz]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
-		//	h = 2*outer_tube_inner_d, center=true);
-	}
-	translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 90])
-		cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
-	
-	//schnittsicht
-	if(schnittsicht)
-		translate([0,0, -35]) cube([50, 50, 50]);
 }
-
