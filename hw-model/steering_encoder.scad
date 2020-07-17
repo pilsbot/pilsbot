@@ -28,6 +28,7 @@ rohrversatz = 22;
 screw_safety_margin_d = 4;
 screw_safety_margin_h = 0;
 lessen_slew = 1-0.5;
+num_bebbels = 10;
 
 schnittsicht = false;
 
@@ -140,33 +141,49 @@ if(outer)
 		color("brown") 
 		{
 			//lower ring
-			translate([0,0,-(rohrversatz+hole_offs+outer_tube_hole_d)]) difference()
+			translate([0,0,-(rohrversatz+hole_offs+outer_tube_hole_d)])
 			{
-				union()
+				difference()
 				{
-					cylinder(h=3*outer_tube_hole_d, d = outer_tube_inner_d-ws);
-					num_bebbels = 10;
-					for(i = [0:num_bebbels])
-					{
-						rotate([0, 0, i*(360/num_bebbels)]) translate([(outer_tube_inner_d-ws)/2, 0, 0])
-							cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
-					}
+					cylinder(h=3*outer_tube_hole_d, d = outer_tube_inner_d);
+					//anti-turn hole
+					translate([0,0,-.5])
+						cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d+ws);
 				}
-				//anti-turn hole
-				translate([0,0,-.5])
-					cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d);
+				//bebbels
+				for(i = [0:num_bebbels])
+				{
+					rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
+						cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
+				}
 			}
 			
 			//expansion
 			expansion_h = rohrversatz-(hole_offs+screw_safety_margin_h+inner_tube_hole_d/2);
-			translate([0,0,-(rohrversatz)]) difference()
+			translate([0,0,-(rohrversatz)])
 			{
-				cylinder(d1=outer_tube_inner_d-ws, d2 = outer_tube_inner_d +2*(screw_safety_margin_d+ws),
-					h=expansion_h);
+				difference()
+				{
+					union()
+					{
+						difference()
+						{
+							cylinder(d1=outer_tube_inner_d, d2 = outer_tube_inner_d +2*(screw_safety_margin_d+ws),
+								h=expansion_h);
+							
+							cylinder(d=inner_tube_outer_d+ws, h=expansion_h);
+						}
+						//bebbels
+						for(i = [0:num_bebbels])
+						{
+							rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
+								cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
+						}
+					}
 				translate([0,0,expansion_h/2]) 
 					cylinder(d1=inner_tube_outer_d, d2 = outer_tube_inner_d +2*screw_safety_margin_d,
 						h=expansion_h/2);
-				cylinder(d=inner_tube_outer_d, h=expansion_h);
+				}
 			}
 			//middle
 			middle_h = 2*(rohrversatz-(expansion_h+hole_offs));
@@ -201,6 +218,7 @@ if(outer)
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
 			translate([0, -10, 0]) cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
 		}
+		
 		
 		//schnittsicht
 		if(schnittsicht)
