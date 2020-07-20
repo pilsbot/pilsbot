@@ -29,6 +29,7 @@ screw_safety_margin_d = 4;
 screw_safety_margin_h = 0;
 lessen_slew = 1-0.5;
 num_bebbels = 10;
+screw_head_d = 10;
 
 schnittsicht = false;
 
@@ -207,7 +208,7 @@ if(outer)
 		//screw_slit
 		hull()
 		{
-			translate([0, 0, -hole_offs]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
+			translate([0, 0, -hole_offs]) rotate([90, 0, 0]) cylinder(d=screw_head_d,
 				h = 2*outer_tube_inner_d, center=true);
 			//translate([0, 0, -hole_offs-2*rohrversatz]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
 			//	h = 2*outer_tube_inner_d, center=true);
