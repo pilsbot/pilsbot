@@ -1,6 +1,6 @@
 [submodule "sw/hoverboard"]
 	path = sw/hoverboard
-	url = git@github.com:Cirromulus/bipropellant-hoverboard-firmware.git
+	url = git@github.com:pilsbot/bipropellant-hoverboard-firmware.git
 [submodule "logo"]
 	path = logo
 	url = git@github.com:pilsbot/logo.git
