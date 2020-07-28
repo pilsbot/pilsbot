@@ -214,7 +214,7 @@ if(outer)
 			//	h = 2*outer_tube_inner_d, center=true);
 		}
 		//small anti-turn hole
-		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 90]) hull()
+		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 0]) hull()
 		{
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
 			translate([0, -10, 0]) cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
