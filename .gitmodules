@@ -7,3 +7,6 @@
 [submodule "sw/head_mcu"]
 	path = sw/head_mcu
 	url = git@github.com:pilsbot/head_mcu.git
+[submodule "sw/lighting"]
+	path = sw/lighting
+	url = git@github.com:pilsbot/lighting.git
