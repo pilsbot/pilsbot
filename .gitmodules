@@ -7,3 +7,6 @@
 [submodule "sw/hoverboard"]
 	path = sw/hoverboard
 	url = https://github.com/pilsbot/bipropellant-hoverboard-firmware
+[submodule "sw/head_mcu"]
+	path = sw/head_mcu
+	url = https://github.com/pilsbot/head_mcu
