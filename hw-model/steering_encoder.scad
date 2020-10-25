@@ -2,9 +2,10 @@ $fa = $preview ? 8 : 3;
 $fs = $preview ? 3 : 0.25;
 
 metal_w = 3;
-inner_tube_inner_d = 20;// actually 22, but dents in hull;
+inner_tube_inner_d = 21;// actually 22, but dents in hull;
 inner_tube_outer_d = 25.5;
 inner_tube_hole_d = 5;
+inner_tube_screw_hole_d = 3.5;
 outer_tube_inner_d = 35;
 outer_tube_hole_d = 3;
 hole_offs = 6;
@@ -27,14 +28,15 @@ tube_height = 80;
 rohrversatz = 22;
 screw_safety_margin_d = 4;
 screw_safety_margin_h = 0;
+extra_slack_inner_d = 2.5; 	//To reduce stresses on pot, try keeping the inner part floating
 lessen_slew = 1-0.5;
 num_bebbels = 10;
 screw_head_d = 10;
 
-schnittsicht = false;
+schnittsicht = true;
 
 outer = true;
-inner = false;
+inner = true;
 
 //calculated
 pot_turn_h = pot_part_h - pot_gewinde_h;
@@ -106,7 +108,7 @@ module poti()
 
 module poti_rotated()
 {
-	#translate([0,0,pot_gesamt_h-hole_offs+inner_tube_hole_d/2+ws]) rotate([180,0,90]) poti();
+	translate([0,0,pot_gesamt_h-hole_offs+inner_tube_hole_d/2+ws]) rotate([180,0,90]) poti();
 }
 
 
@@ -118,16 +120,18 @@ if(inner)
 	{
 		union()
 		{
+			kegel_d = inner_tube_inner_d-extra_slack_inner_d;
 			//lower cylinder
-			translate([0, 0, - i_h + .5*hole_offs]) cylinder(d = inner_tube_inner_d, h = 1.5*hole_offs);
+			translate([0, 0, - i_h + .5*hole_offs]) cylinder(d = kegel_d, h = 1.5*hole_offs);
 			//kegel
-			cylinder(d1 = inner_tube_inner_d, d2 = pot_d + 2*ws, h = pot_turn_h-hole_offs+inner_tube_hole_d/2);
+			cylinder(d1 = kegel_d, d2 = pot_d + 2*ws, h = pot_turn_h-hole_offs+inner_tube_hole_d/2);
 		}
 		//hole
 		translate([0, 0, - hole_offs]) rotate([90])
-			//intentionaly big hole for more play (reducing wear on poti?)
-			cylinder(d = inner_tube_hole_d, h = outer_tube_inner_d + 10, center=true);
-		poti_rotated();
+			cylinder(d = inner_tube_screw_hole_d, h = outer_tube_inner_d + 10, center=true);
+		
+		scale([1.25,1.1,1])	//Increase X slack
+			poti_rotated();
 		
 		//schnittsicht
 		if(schnittsicht)
@@ -204,7 +208,7 @@ if(outer)
 					h=top_h-ws);
 			}
 		}
-		poti_rotated();
+		#poti_rotated();
 		//screw_slit
 		hull()
 		{
