@@ -33,7 +33,7 @@ lessen_slew = 1-0.5;
 num_bebbels = 10;
 screw_head_d = 10;
 
-schnittsicht = true;
+schnittsicht = false;
 
 outer = true;
 inner = true;
@@ -190,22 +190,43 @@ if(outer)
 						h=expansion_h/2);
 				}
 			}
-			//middle
-			middle_h = 2*(rohrversatz-(expansion_h+hole_offs));
-			translate([0,0,-rohrversatz+expansion_h]) difference()
+			intersection()
 			{
-				cylinder(d = outer_tube_inner_d +2*(screw_safety_margin_d+ws), h=middle_h);
-				cylinder(d = outer_tube_inner_d +2*(screw_safety_margin_d), h=middle_h+1);
-			}
-			//inpansion (lol)
-			top_h = pot_gesamt_h-(hole_offs+inner_tube_hole_d/2+ws)+(rohrversatz-expansion_h-middle_h);
-			translate([0,0,-rohrversatz+expansion_h+middle_h]) difference()
-			{
-				dimension = outer_tube_inner_d +2*(screw_safety_margin_d);
-				cylinder(d1 = dimension+2*ws, d2 = dimension*lessen_slew,
-					h=top_h);
-				cylinder(d1 = dimension, d2 = pot_d_low,	//for better 3d-printability
-					h=top_h-ws);
+				union()
+				{
+					extra_d_thickness = 2;
+					diameter = outer_tube_inner_d +2*(screw_safety_margin_d);
+					
+					//middle
+					middle_h = 2*(rohrversatz-(expansion_h+hole_offs));
+					translate([0,0,-rohrversatz+expansion_h]) difference()
+					{
+						cylinder(d = diameter +2*ws, h=middle_h);
+						cylinder(d1 = diameter, d2 = diameter-(extra_d_thickness+0.5), h=middle_h+1);
+					}
+					//inpansion (lol)
+					top_h = pot_gesamt_h-(hole_offs+inner_tube_hole_d/2+ws)+
+							(rohrversatz-expansion_h-middle_h);
+					translate([0,0,-rohrversatz+expansion_h+middle_h]) difference()
+					{
+						
+						cylinder(d1 = diameter+2*ws, d2 = diameter*lessen_slew,
+							h=top_h);
+						cylinder(d1 = diameter-extra_d_thickness, d2 = pot_d_low,	//for better 3d-printability
+							h=top_h-ws);
+					}
+				}
+				
+				translate([-40, -pot_kranz_d/2, -9]) {
+					cube([80, pot_kranz_d, 30]);
+					translate([0, pot_kranz_d, 0])
+						rotate([135, 0, 0])
+							cube([80, pot_kranz_d, 30]);
+					mirror([0, 1, 0])
+						rotate([135, 0, 0])
+							cube([80, pot_kranz_d, 30]);
+					
+				}
 			}
 		}
 		#poti_rotated();
