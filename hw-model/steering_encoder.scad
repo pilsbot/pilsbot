@@ -36,7 +36,7 @@ screw_head_d = 10;
 schnittsicht = false;
 
 outer = true;
-inner = true;
+inner = false;
 
 //calculated
 pot_turn_h = pot_part_h - pot_gewinde_h;
@@ -241,8 +241,9 @@ if(outer)
 		//small anti-turn hole
 		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 0]) hull()
 		{
-			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
-			translate([0, -10, 0]) cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
+			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
+			translate([0, -10, 0])
+				cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
 		}
 		
 		
