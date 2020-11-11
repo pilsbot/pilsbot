@@ -1,5 +1,5 @@
 # pilsbot
-Automate your pils transportation
+Automate your pils transportation <noscript><a href="https://liberapay.com/pilsbot/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
 ![lorry_prototype](doc/DSC_0714.JPG)
 
