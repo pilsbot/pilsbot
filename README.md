@@ -1,5 +1,7 @@
 # pilsbot <a href="https://liberapay.com/pilsbot/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
-Automate your pils transportation 
+Automate your pils transportation!
+
+lscode: [O+S++I!CE-MV---!PSD-](https://lscodes.pke.fyi/api/decode?q=O+S++IE-MV---!PSD-)
 
 ![lorry_prototype](doc/DSC_0714.JPG)
 
