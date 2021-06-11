@@ -10,3 +10,6 @@
 [submodule "sw/head_mcu"]
 	path = sw/head_mcu
 	url = https://github.com/pilsbot/head_mcu
+[submodule "pcb/overvoltage_protection"]
+	path = pcb/overvoltage_protection
+	url = https://github.com/pilsbot/overvoltage_protection
