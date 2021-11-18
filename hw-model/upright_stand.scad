@@ -1,4 +1,4 @@
-chassis_tube_d = 26.5;
+chassis_tube_d = 26;
 holder_w = 140;
 grip_w = holder_w/4;
 ws=2;
@@ -38,5 +38,8 @@ difference(){
 		text("AUTATIME", halign="center", valign="center",size=20);
 }
 
-translate([(holder_w-grip_w)/2, 2*chassis_tube_d])
+translate([(holder_w-grip_w)/4, 2*chassis_tube_d])
+	clip(grip_w, grip_w, 2*cable_extra_space.y+difference_to_upper_tube);
+
+translate([3*(holder_w-grip_w)/4, 2*chassis_tube_d])
 	clip(grip_w, grip_w, 2*cable_extra_space.y+difference_to_upper_tube);
