@@ -16,13 +16,13 @@ module clip(w_total, w_clip, h, tube_d, cube_offset=0, lolcut=false) {
 			translate([0, cube_offset, 0])
 				cube([w_total, chassis_tube_d+ws, h+tube_d/2]);
 			//clip
-			translate(upper+[(w_total-w_clip)/2,-cube_offset/8,cube_offset/6]) rotate([0, 90, 0])
+			translate(upper+[(w_total-w_clip)/2,.5,cube_offset/8]) rotate([0, 90, 0])
 				cylinder(d=tube_d+2*ws,h=w_clip);
 				
 		}
 		//side cut
 		translate([-.5, -.5+cube_offset-ws, h])
-			cube([w_total+1, tube_d/2+1+abs(cube_offset)+ws, lolcut ? tube_d : tube_d-ws]);
+			cube([w_total+1, tube_d/2+1+abs(cube_offset)+ws, lolcut ? tube_d+20 : tube_d-ws]);
 		//tube
 		translate(upper-[.5,0,0]) rotate([0, 90, 0])
 			cylinder(d=tube_d,h=w_total+1);
