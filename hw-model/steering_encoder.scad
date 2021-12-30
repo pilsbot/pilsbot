@@ -238,8 +238,8 @@ if(outer)
 			//translate([0, 0, -hole_offs-2*rohrversatz]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
 			//	h = 2*outer_tube_inner_d, center=true);
 		}
-		//small anti-turn hole
-		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 0]) hull()
+		//small anti-turn hole. -2 for "didn't hit the exact point with the dremel"
+		translate([0, 0, - rohrversatz - (hole_offs-2)]) rotate([90, 0, 0]) hull()
 		{
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
 			// Disabled langloch for better protection against lift-up slip
