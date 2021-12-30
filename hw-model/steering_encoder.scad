@@ -242,8 +242,9 @@ if(outer)
 		translate([0, 0, - rohrversatz - hole_offs]) rotate([90, 0, 0]) hull()
 		{
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
-			translate([0, -10, 0])
-				cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
+			// Disabled langloch for better protection against lift-up slip
+			//translate([0, -10, 0])
+			//	cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
 		}
 		
 		
