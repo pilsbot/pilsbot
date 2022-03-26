@@ -5,7 +5,7 @@ metal_w = 3;
 inner_tube_inner_d = 21;// actually 22, but dents in hull;
 inner_tube_outer_d = 25.5;
 inner_tube_hole_d = 5;
-inner_tube_screw_hole_d = 3.5;
+inner_tube_screw_hole_d = 5;
 outer_tube_inner_d = 35;
 outer_tube_hole_d = 3;
 hole_offs = 6;
@@ -28,7 +28,7 @@ tube_height = 80;
 rohrversatz = 22;
 screw_safety_margin_d = 4;
 screw_safety_margin_h = 0;
-extra_slack_inner_d = 2.5; 	//To reduce stresses on pot, try keeping the inner part floating
+extra_slack_inner_d = 2; 	//To reduce stresses on pot, try keeping the inner part floating
 lessen_slew = 1-0.5;
 num_bebbels = 10;
 screw_head_d = 10;
@@ -36,7 +36,7 @@ screw_head_d = 10;
 schnittsicht = false;
 
 outer = true;
-inner = false;
+inner = true;
 
 //calculated
 pot_turn_h = pot_part_h - pot_gewinde_h;
@@ -75,7 +75,7 @@ module inner_tube()
 	{
 		tube(outer_tube_inner_d, outer_tube_inner_d+metal_w, tube_height-rohrversatz);
 		//hole
-		translate([0, 0, tube_height - rohrversatz - hole_offs]) rotate([90, 0, 90])
+		#translate([0, outer_tube_inner_d/2+5, tube_height - rohrversatz - hole_offs]) rotate([90, 0, ])
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
 	}
 }
@@ -120,11 +120,12 @@ if(inner)
 	{
 		union()
 		{
-			kegel_d = inner_tube_inner_d-extra_slack_inner_d;
+			kegel_d = inner_tube_inner_d + 2*ws;
+			base_kegel_d = inner_tube_inner_d-extra_slack_inner_d;
 			//lower cylinder
-			translate([0, 0, - i_h + .5*hole_offs]) cylinder(d = kegel_d, h = 1.5*hole_offs);
+			translate([0, 0, - i_h + .5*hole_offs]) cylinder(d = base_kegel_d, h = 1.5*hole_offs);
 			//kegel
-			cylinder(d1 = kegel_d, d2 = pot_d + 2*ws, h = pot_turn_h-hole_offs+inner_tube_hole_d/2);
+			cylinder(d1 = kegel_d, d2 = kegel_d/2, h = pot_turn_h-hole_offs+inner_tube_hole_d/2);
 		}
 		//hole
 		translate([0, 0, - hole_offs]) rotate([90])
@@ -146,11 +147,12 @@ if(outer)
 		color("brown") 
 		{
 			//lower ring
-			translate([0,0,-(rohrversatz+hole_offs+outer_tube_hole_d)])
+			lower_ring_height = 25;
+			translate([0,0,-(rohrversatz+lower_ring_height)])
 			{
 				difference()
 				{
-					cylinder(h=3*outer_tube_hole_d, d = outer_tube_inner_d);
+					cylinder(h=lower_ring_height, d = outer_tube_inner_d);
 					//anti-turn hole
 					translate([0,0,-.5])
 						cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d+ws);
@@ -159,7 +161,7 @@ if(outer)
 				for(i = [0:num_bebbels])
 				{
 					rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
-						cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
+						cylinder(d=ws, h = lower_ring_height+ws);
 				}
 			}
 			
