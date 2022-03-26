@@ -1,6 +1,8 @@
 $fn = 200;
 
+h = 9+5;
+
 difference(){
-	cylinder(d1 = 10, d2 = 7, h = 9);
-	cylinder(d = 4.5, h = 10);
+	cylinder(d1 = 10, d2 = 7, h = h);
+	cylinder(d = 4.5, h = h+1);
 }
