@@ -1,11 +1,12 @@
-chassis_tube_d = 26;	//TODO: Check
-diff = 27.5;			// Measured from plate to top point of tube
+chassis_tube_d = 25;	//TODO: Check
+diff = 26;			// Measured from plate to top point of tube
 breite = 23;
-sdriver_clearance = 10;
-absatz_h = 10;
+sdriver_clearance = 13;
+absatz_h = 7;
+screw_d = 5;
 
 base_h = diff-chassis_tube_d/2;
-$fn = $preview ? 80 : 120;
+$fn = $preview ? 80 : 200;
 
 difference(){
 	union(){
@@ -17,7 +18,7 @@ difference(){
 				
 				//the tube
 				translate([-chassis_tube_d/2,0,-.5])
-					cylinder(d=chassis_tube_d, h=breite+1);
+					#cylinder(d=chassis_tube_d, h=breite+1);
 			}
 		cube([breite, breite, base_h]);
 	}
