@@ -6,7 +6,7 @@ top_w = 92;
 top_h = max(6, 12); // screws are poking out
 					// FIXME: This makes angle a bit wrong.
 total_h = 80;
-hole_at_h = 50;
+hole_at_h = 60;
 hole_h = 14;
 hole_w = 20;
 batt_l = 370;
@@ -84,7 +84,7 @@ module back_holder_half_2d(with_battery = true, with_fins = true) {
 		}
 		if(with_battery){
 			translate([0, ws])
-				!minkowski() {
+				minkowski() {
 					back_cap_half_2d();
 					circle(d = .4, $fn = 20);
 				}
