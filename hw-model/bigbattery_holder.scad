@@ -30,7 +30,7 @@ module screw(sunk = true) {
 	}
 }
 
-module back_cap_half_2d() {
+module back_cap_half_2d(expand = true) {
 	// lower lip
 	square([base_w/2, base_lip_h]);
 	// body
@@ -46,7 +46,8 @@ module back_cap_half_2d() {
 	}
 }
 
-module back_cap_half() {
+module back_cap_half(expand = true) {
+	expansion = .4;
 	linear_extrude(batt_l) {
 		back_cap_half_2d();
 	}
@@ -83,7 +84,10 @@ module back_holder_half_2d(with_battery = true, with_fins = true) {
 		}
 		if(with_battery){
 			translate([0, ws])
-				back_cap_half_2d();
+				minkowski() {
+					back_cap_half_2d();
+					circle(d = .4);
+				}
 		}
 	}
 }
