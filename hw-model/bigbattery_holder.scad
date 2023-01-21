@@ -58,7 +58,7 @@ module battery_upright() {
 		back_cap_half();
 }
 
-module back_holder_half_2d(with_battery = true) {
+module back_holder_half_2d(with_battery = true, with_fins = true) {
 	difference() {
 		union() {
 			// battery
@@ -71,7 +71,15 @@ module back_holder_half_2d(with_battery = true) {
 			]);
 			// base
 			translate([0, ws+total_h])
-				square([top_w/2+ws+fins_l, fins_h]);
+				square([top_w/2+ws, ws]);
+			if(with_fins) {
+				// holders
+				translate([top_w/2, ws+total_h])
+					square([ws, plate_clearance]);
+				// fins
+				translate([top_w/2, ws+total_h+plate_clearance])
+					square([ws+fins_l, fins_h]);
+			}
 		}
 		if(with_battery){
 			translate([0, ws])
@@ -79,6 +87,8 @@ module back_holder_half_2d(with_battery = true) {
 		}
 	}
 }
+
+//!back_holder_half_2d();
 
 module back_holder_half() {
 	difference() {
@@ -94,12 +104,18 @@ module back_holder_half() {
 						}
 				}
 			translate([0, 0, ws])
-				linear_extrude(back_holder_l)
+				linear_extrude(back_holder_l/3)
+					back_holder_half_2d(with_battery = true);
+			translate([0, 0, ws+back_holder_l/3])
+				linear_extrude(back_holder_l/3)
+					back_holder_half_2d(with_battery = true, with_fins = false);
+			translate([0, 0, ws + 2 * back_holder_l/3])
+				linear_extrude(back_holder_l/3)
 					back_holder_half_2d(with_battery = true);
 		}
-		parts = back_holder_l / 5;
+		parts = back_holder_l / 6;
 		for(z = [parts/2 : parts : back_holder_l-1]) {
-			translate([top_w/2+ws+fins_l/2, ws+total_h, z])
+			translate([top_w/2+ws+fins_l/2, ws+total_h+plate_clearance, z+ws])
 				rotate([90, 0, 0])
 					screw();
 		}
