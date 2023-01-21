@@ -1,7 +1,7 @@
-outer_hole_d = 2*40;
+outer_hole_d = 50;
 cable_d = 4;
 slit_w = .5;
-h = 2;
+h = 1.4;
 
 linear_extrude(h) {
 	difference() {
