@@ -1,5 +1,5 @@
 base_w = 85;
-base_lip_h = 1.25;
+base_lip_h = 1.85;
 body_lower_w = 81.5;
 body_upper_w = 85;
 top_w = 92;
@@ -84,9 +84,9 @@ module back_holder_half_2d(with_battery = true, with_fins = true) {
 		}
 		if(with_battery){
 			translate([0, ws])
-				minkowski() {
+				!minkowski() {
 					back_cap_half_2d();
-					circle(d = .4);
+					circle(d = .4, $fn = 20);
 				}
 		}
 	}
