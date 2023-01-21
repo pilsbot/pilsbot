@@ -7,8 +7,27 @@ top_h = 6;
 total_h = 80;
 hole_at_h = 50;
 hole_h = 14;
+hole_w = 20;
+batt_l = 370;
 
-ws = 2.5;
+ws = 2.75;
+plate_clearance = 20;
+back_holder_l = 100;
+fins_l = 20;
+fins_h = 4;
+
+wood_screw_l = 16;
+wood_screw_d = 3;
+wood_screw_head = 2;
+
+module screw(sunk = true) {
+	$fn = $preview ? 10 : 40;
+	translate([0, 0, sunk ? -(wood_screw_head-.1) : 0]) {
+		translate([0,0,-wood_screw_l])
+			cylinder(h = wood_screw_l, d = wood_screw_d);
+		cylinder(h = wood_screw_head, d1 = wood_screw_d, d2 = wood_screw_d + 2*wood_screw_head);
+	}
+}
 
 module back_cap_half_2d() {
 	// lower lip
@@ -27,11 +46,68 @@ module back_cap_half_2d() {
 }
 
 module back_cap_half() {
-	linear_extrude(1) {
+	linear_extrude(batt_l) {
 		back_cap_half_2d();
 	}
 }
 
-back_cap_half();
-mirror([1, 0, 0])
+module battery_upright() {
 	back_cap_half();
+	mirror([1, 0, 0])
+		back_cap_half();
+}
+
+module back_holder_half_2d(with_battery = true) {
+	difference() {
+		union() {
+			// battery
+			//square([top_w/2+ws, ws + total_h]);
+			polygon([
+				[0, 0],
+				[base_w/2 + ws, 0],
+				[top_w/2+ws, ws + total_h],
+				[0, ws + total_h]
+			]);
+			// base
+			translate([0, ws+total_h])
+				square([top_w/2+ws+fins_l, fins_h]);
+		}
+		if(with_battery){
+			translate([0, ws])
+				back_cap_half_2d();
+		}
+	}
+}
+
+module back_holder_half() {
+	difference() {
+		union() {
+			linear_extrude(ws)
+				difference() {
+					back_holder_half_2d(with_battery = false);
+					// battery cable hole
+					translate([0, hole_at_h])
+						hull(){
+							circle(d = hole_h);
+							translate([(hole_w-hole_h)/2, 0]) circle(d = hole_h);
+						}
+				}
+			translate([0, 0, ws])
+				linear_extrude(back_holder_l)
+					back_holder_half_2d(with_battery = true);
+		}
+		parts = back_holder_l / 5;
+		for(z = [parts/2 : parts : back_holder_l-1]) {
+			translate([top_w/2+ws+fins_l/2, ws+total_h, z])
+				rotate([90, 0, 0])
+					screw();
+		}
+	}
+}
+
+module back_holder() {
+	back_holder_half();
+	mirror([1, 0, 0]) back_holder_half();
+}
+
+back_holder();
