@@ -3,7 +3,8 @@ base_lip_h = 1.25;
 body_lower_w = 81.5;
 body_upper_w = 85;
 top_w = 92;
-top_h = 6;
+top_h = max(6, 12); // screws are poking out
+					// FIXME: This makes angle a bit wrong.
 total_h = 80;
 hole_at_h = 50;
 hole_h = 14;
