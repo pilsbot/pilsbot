@@ -12,7 +12,7 @@ hole_w = 20;
 batt_l = 370;
 
 ws = 2.75;
-plate_clearance = 20;
+plate_clearance = 30;
 back_holder_l = 100;
 fins_l = 20;
 fins_h = 4;
@@ -103,6 +103,7 @@ module back_holder_half() {
 					// battery cable hole
 					translate([0, hole_at_h])
 						hull(){
+							$fn = 50;
 							circle(d = hole_h);
 							translate([(hole_w-hole_h)/2, 0]) circle(d = hole_h);
 						}
