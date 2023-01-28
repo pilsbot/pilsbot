@@ -1,5 +1,5 @@
 base_w = 85;
-base_lip_h = 1.85;
+base_lip_h = 2;
 body_lower_w = 81.5;
 body_upper_w = 85;
 top_w = 92;
@@ -8,7 +8,7 @@ top_h = max(6, 12); // screws are poking out
 total_h = 80+1;
 hole_at_h = 60;
 hole_h = 14+15;
-hole_w = 20+20;
+hole_w = 20+30;
 batt_l = 370;
 
 ws = 2.75;
@@ -89,7 +89,7 @@ module back_holder_half_2d(with_battery = true, with_fins = true) {
 			translate([0, ws])
 				minkowski() {
 					back_cap_half_2d();
-					circle(d = .5, $fn = 20);
+					circle(d = .6, $fn = 20);
 				}
 		}
 	}
@@ -112,7 +112,7 @@ module holder_half(close = false) {
 								circle(d = hole_h);
 								translate([(hole_w-hole_h)/2, 0]) circle(d = hole_h);
 								translate([0, -hole_h/2])
-								circle(d = hole_h/2);
+								circle(d = hole_h);
 							}
 					}
 			}
@@ -155,5 +155,5 @@ module front_holder(){
 	}
 }
 
-//back_holder();
-front_holder();
+back_holder();
+//front_holder();
