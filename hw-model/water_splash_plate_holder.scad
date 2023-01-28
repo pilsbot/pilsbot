@@ -1,6 +1,6 @@
 h = 90;
 thickn = 3;
-ws = 5;
+ws = 3;
 feet_l = 10;
 w = 20;
 
