@@ -9,8 +9,10 @@ inner_tube_screw_hole_d = 5;
 outer_tube_inner_d = 35;
 outer_tube_hole_d = 3;
 hole_offs = 6;
+outer_hole_offs = 4; //for small anti-turn hole. -2 for "didn't hit the exact point with the dremel"
+lower_ring_height = 40;
 
-ws = 2;
+ws = 2.4;
 
 pot_d = 6.3;
 pot_d_low = 16.5;
@@ -31,12 +33,13 @@ screw_safety_margin_h = 0;
 extra_slack_inner_d = 2; 	//To reduce stresses on pot, try keeping the inner part floating
 lessen_slew = 1-0.5;
 num_bebbels = 10;
+bebbels_extra_inset = 2;
 screw_head_d = 10;
 
 schnittsicht = false;
 
 outer = true;
-inner = true;
+inner = false;
 
 //calculated
 pot_turn_h = pot_part_h - pot_gewinde_h;
@@ -75,7 +78,7 @@ module inner_tube()
 	{
 		tube(outer_tube_inner_d, outer_tube_inner_d+metal_w, tube_height-rohrversatz);
 		//hole
-		#translate([0, outer_tube_inner_d/2+5, tube_height - rohrversatz - hole_offs]) rotate([90, 0, ])
+		#translate([0, outer_tube_inner_d/2+5, tube_height - rohrversatz - outer_hole_offs]) rotate([90, 0, ])
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10);
 	}
 }
@@ -147,21 +150,20 @@ if(outer)
 		color("brown") 
 		{
 			//lower ring
-			lower_ring_height = 25;
 			translate([0,0,-(rohrversatz+lower_ring_height)])
 			{
+				// hull
 				difference()
 				{
 					cylinder(h=lower_ring_height, d = outer_tube_inner_d);
-					//anti-turn hole
-					translate([0,0,-.5])
-						cylinder(h=rohrversatz+hole_offs+1, d = inner_tube_outer_d+ws);
+					#translate([0,0,-.5])
+						cylinder(h=lower_ring_height+2, d = inner_tube_outer_d+ws);
 				}
 				//bebbels
 				for(i = [0:num_bebbels])
 				{
 					rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
-						cylinder(d=ws, h = lower_ring_height+ws);
+						cylinder(d=ws+bebbels_extra_inset, h = lower_ring_height+ws, $fn = 8);
 				}
 			}
 			
@@ -184,7 +186,7 @@ if(outer)
 						for(i = [0:num_bebbels])
 						{
 							rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
-								cylinder(d=ws, h = 3*outer_tube_hole_d+ws);
+								cylinder(d=ws+bebbels_extra_inset, h = 3*outer_tube_hole_d+ws, $fn = 8);
 						}
 					}
 				translate([0,0,expansion_h/2]) 
@@ -232,6 +234,7 @@ if(outer)
 			}
 		}
 		#poti_rotated();
+		
 		//screw_slit
 		hull()
 		{
@@ -240,8 +243,8 @@ if(outer)
 			//translate([0, 0, -hole_offs-2*rohrversatz]) rotate([90, 0, 0]) cylinder(d=inner_tube_hole_d+2*ws,
 			//	h = 2*outer_tube_inner_d, center=true);
 		}
-		//small anti-turn hole. -2 for "didn't hit the exact point with the dremel"
-		translate([0, 0, - rohrversatz - (hole_offs-2)]) rotate([90, 0, 0]) hull()
+
+		translate([0, 0, - rohrversatz - (outer_hole_offs)]) rotate([90, 0, 0]) hull()
 		{
 			cylinder(d = outer_tube_hole_d, h = outer_tube_inner_d + 10, center = true);
 			// Disabled langloch for better protection against lift-up slip
