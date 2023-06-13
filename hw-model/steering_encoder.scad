@@ -3,7 +3,7 @@ $fs = $preview ? 3 : 0.25;
 
 metal_w = 3;
 inner_tube_inner_d = 21;// actually 22, but dents in hull;
-inner_tube_outer_d = 25.5;
+inner_tube_outer_d = 26;
 inner_tube_hole_d = 5;
 inner_tube_screw_hole_d = 5;
 outer_tube_inner_d = 35;
@@ -33,7 +33,7 @@ screw_safety_margin_h = 0;
 extra_slack_inner_d = 2; 	//To reduce stresses on pot, try keeping the inner part floating
 lessen_slew = 1-0.5;
 num_bebbels = 10;
-bebbels_extra_inset = 2;
+bebbels_extra_inset = .25;
 screw_head_d = 10;
 
 schnittsicht = false;
@@ -85,8 +85,10 @@ module inner_tube()
 
 
 
-module poti()
+module poti(extra = true)
 {
+	pimmel_act = pot_pimmel * (extra ? 1.25 : 1);
+	
 	cylinder(d = pot_d_low, h= pot_h_low);
 	
 	translate([0,0,pot_h_low])
@@ -96,7 +98,7 @@ module poti()
 		//platine
 		translate([0, -pot_d_low/2, -1]) cube([15,pot_d_low, 1]);
 		//pimmel
-		translate([-pot_pimmel.x/2, -pot_d_low/2]) cube(pot_pimmel);
+		translate([-pimmel_act.x/2, -pot_d_low/2]) cube(pimmel_act);
 	}
 	//gewinde
 	translate([0,0,pot_h_low+pot_kranz_h]) cylinder(d = pot_gewinde_d, h= pot_gewinde_h);
@@ -156,14 +158,14 @@ if(outer)
 				difference()
 				{
 					cylinder(h=lower_ring_height, d = outer_tube_inner_d);
-					#translate([0,0,-.5])
+					translate([0,0,-.5])
 						cylinder(h=lower_ring_height+2, d = inner_tube_outer_d+ws);
 				}
 				//bebbels
 				for(i = [0:num_bebbels])
 				{
 					rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
-						cylinder(d=ws+bebbels_extra_inset, h = lower_ring_height+ws, $fn = 8);
+						cylinder(d=ws+bebbels_extra_inset, h = lower_ring_height+ws, $fn = 80);
 				}
 			}
 			
@@ -186,7 +188,7 @@ if(outer)
 						for(i = [0:num_bebbels])
 						{
 							rotate([0, 0, i*(360/num_bebbels)]) translate([(inner_tube_outer_d+ws)/2, 0, 0])
-								cylinder(d=ws+bebbels_extra_inset, h = 3*outer_tube_hole_d+ws, $fn = 8);
+								cylinder(d=ws+bebbels_extra_inset, h = 3*outer_tube_hole_d+ws, $fn = 80);
 						}
 					}
 				translate([0,0,expansion_h/2]) 
