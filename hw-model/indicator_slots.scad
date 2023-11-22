@@ -3,9 +3,12 @@ height = 6;
 curvature_r = 70;
 rohr_d = 25;
 ws = 1;
-end_l = 65;
+end_l1 = 65/2;
+end_l2 = 65 + end_l1;
 kabelbinder_w = 2.5;
 kabelbinder_h = 1.1;
+
+end_l_max = max(end_l1, end_l2);
 
 module schnitt()
 {
@@ -34,13 +37,13 @@ module kb_slot()
 	cube([wide + ws * 2 + 2, kabelbinder_h, kabelbinder_w]);
 }
 
-module segment()
+module segment(length)
 {
 	difference()
 	{
-		linear_extrude(end_l, convexity = 4)
+		linear_extrude(length, convexity = 4)
 			schnitt();
-		for (z = [1 * end_l / 4, 3 * end_l / 4])
+		for (z = [1 * end_l_max / 4, 3 * end_l_max / 4])
 			translate([-1 - ((wide + 2*ws) / 2), -ws, z])
 				kb_slot();
 	}
@@ -68,10 +71,10 @@ module rounding()
 translate([0, curvature_r, 0])
 	mirror([0,0,1])
 		rotate([0, -90, 0])
-			segment();
+			segment(end_l1);
 
 rounding();
 
 translate([curvature_r, 0, 0])
 	rotate([90, 90, 0])
-		segment();
+		segment(end_l2);
