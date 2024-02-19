@@ -5,8 +5,8 @@ rohr_d = 25;
 ws = 1;
 end_l1 = 65/2;
 end_l2 = 65 + end_l1;
-kabelbinder_w = 2.5;
-kabelbinder_h = 1.1;
+kabelbinder_w = 2.5+1;
+kabelbinder_h = 1.1+1;
 
 end_l_max = max(end_l1, end_l2);
 
