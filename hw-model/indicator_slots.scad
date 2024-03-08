@@ -8,7 +8,8 @@ end_l2 = 65 + end_l1;
 kabelbinder_w = 2.5+1;
 kabelbinder_h = 1.1+1;
 
-end_l_max = max(end_l1, end_l2);
+end_slot_dist = 8;
+slot_innenversatz = 0; // -ws
 
 module schnitt()
 {
@@ -37,14 +38,17 @@ module kb_slot()
 	cube([wide + ws * 2 + 2, kabelbinder_h, kabelbinder_w]);
 }
 
-module segment(length)
+module segment(length, also_start_hole = false)
 {
 	difference()
 	{
 		linear_extrude(length, convexity = 4)
 			schnitt();
-		for (z = [1 * end_l_max / 4, 3 * end_l_max / 4])
-			translate([-1 - ((wide + 2*ws) / 2), -ws, z])
+		z = [length - end_slot_dist, end_slot_dist];
+		translate([-1 - ((wide + 2*ws) / 2), slot_innenversatz, z[0]])
+			kb_slot();
+		if (also_start_hole)
+			translate([-1 - ((wide + 2*ws) / 2), slot_innenversatz, z[1]])
 				kb_slot();
 	}
 }
@@ -63,7 +67,7 @@ module rounding()
 			rotate([0, 0, (180 + 90) + angle])
 				translate([0, curvature_r])
 					rotate([0, -90, 0])
-						translate([-1 - ((wide + 2*ws) / 2), -ws, -kabelbinder_w/2])
+						translate([-1 - ((wide + 2*ws) / 2), slot_innenversatz, -kabelbinder_w/2])
 							kb_slot();
 	}
 }
@@ -77,4 +81,4 @@ rounding();
 
 translate([curvature_r, 0, 0])
 	rotate([90, 90, 0])
-		segment(end_l2);
+		segment(end_l2, also_start_hole = true);
