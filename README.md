@@ -3,7 +3,8 @@ Automate your pils transportation!
 
 lscode: [O+S++I!CE-MV---!PSD-](https://lscodes.pke.fyi/api/decode?q=O+S++IE-MV---!PSD-)
 
-![lorry_prototype](doc/DSC_0714.JPG)
+![lorry_prototype](https://github.com/pilsbot/pilsbot/assets/7480344/018a10a5-a013-4b19-a1f4-ab59de31ba23)
+
 
 This project intends to build an autonomous lorry for transporting pils-beer and other beverages, while following its "flock" - us humans.
 It does so by using cheap hoverboard-hub-motors and entry-level robotics equipment (i.e. a jetson nano, OAK-D stereo camera).
