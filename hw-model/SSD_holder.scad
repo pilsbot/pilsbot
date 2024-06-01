@@ -1,8 +1,11 @@
 $fa = $preview ? 8 : 4;
 $fs = $preview ? 3 : 0.25;
 
-screw_d = 1.3;
-box = [100,40,10];
+screw_d = 1.5;
+root_box = [100,40,10];
+logging_box = [100,35.5,13];
+
+box = logging_box;
 
 thickness = 2;
 roundung = 1;
