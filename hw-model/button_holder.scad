@@ -5,7 +5,7 @@ $fs = $preview ? 3 : 0.25;
 hole_d = 4.9;
 hole_distance = 20;
 hole_to_wall = 6;
-thickness = 3;
+thickness = 2.8;
 
 switch_dim = [6.3, 12.8, 5.8];
 switch_hole_d = 1.5;
@@ -37,7 +37,7 @@ module switch()
 	{
 		union()
 		{
-			cube(switch_dim);
+			#cube(switch_dim);
 			translate([switch_holes.x, switch_holes.y])
 				cylinder(d=switch_hole_d+switch_holes_extra, h = switch_dim.z);
 			translate([switch_holes.x, switch_dim.y-switch_holes.y])
