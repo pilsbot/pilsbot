@@ -1,9 +1,9 @@
-id = 22 + .3;
+id = 21 + .75;
 ws = 1;
-diff = 1/2;
-h = 50;
+diff = 1/2.5;
+h = 40;
 baseplate_d =  2 * id;
-baseplate_ws = 2;
+baseplate_ws = 3;
 
 num_bobbls = 7;
 
