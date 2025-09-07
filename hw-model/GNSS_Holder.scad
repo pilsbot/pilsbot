@@ -6,9 +6,12 @@ receiver_h = 18.5;
 receiver_top_d = 25.5;
 receiver_top_slit = 13;
 
-profil_w = 21;
-profil_h = 13;
-profil_screw_dist = 10;
+profil_w = 10;
+profil_h = 37.5;	// up to the last hole outside
+profil_screw_dist = 15.75/2;
+profil_screw_n = 3;
+profil_hole_d = 4.5;
+profil_metall_d = 1;
 
 screw_gripping_d = 1.3;
 
@@ -56,19 +59,39 @@ difference() {
 shelf = 2*ws;
 // lower holder
 translate([0, 0, -ws]) {
-	difference() {
-		hull() {
-			cylinder(d = receiver_lower_d+ws, h = ws/2, $fn = 100);
-			translate([receiver_lower_d/2-ws-shelf+ws/2, -profil_w/2, -profil_h-ws])
-				cube([ws, profil_w, ws]);
+	total_len = (profil_screw_n - 1) * profil_screw_dist;
+	first_hole_offset = -profil_h + profil_hole_d / 2;
+	x_back = receiver_lower_d/2-shelf;
+	
+	difference()
+	{
+		union()
+		{
+			difference() {
+				union() {
+					hull() {
+						cylinder(d = receiver_lower_d+ws, h = ws/2, $fn = 100);
+						translate([receiver_lower_d/2-ws-shelf+ws/2, -profil_w/2, -profil_h-ws])
+							cube([ws, profil_w, ws]);
+					}
+					// nix
+				}
+				//resting "shelf"
+				translate([x_back, -receiver_lower_d, -(receiver_lower_d+ws)])
+					cube([receiver_lower_d/2, 2*receiver_lower_d, receiver_lower_d+(1.5*ws) /* ?? */]);
+			}
+			
+			// holder holes
+			// times two to skip middle one
+			for(z = [0: profil_screw_dist*2: total_len])
+				translate([x_back, 0, first_hole_offset + z])
+					rotate([0, 90, 0])
+						cylinder(d = profil_hole_d, h = profil_metall_d, $fn = 20);
 		}
-		//resting "shelf"
-		translate([receiver_lower_d/2-shelf, -receiver_lower_d, -receiver_lower_d+ws])
-			cube([receiver_lower_d/2, 2*receiver_lower_d, receiver_lower_d]);
 		
 		// screw holes
-		for(y = [-profil_screw_dist/2, profil_screw_dist/2])
-			translate([receiver_d/2, y, -2*profil_h/3])
+		for(z = [0: profil_screw_dist: total_len])
+			translate([receiver_d/2, 0, first_hole_offset + z])
 				rotate([0, -90, 0])
 					cylinder(d = screw_gripping_d, h = receiver_d, $fn = 20);
 	}
