@@ -6,7 +6,7 @@ height = 6 + ws;
 
 side_space = 6;
 slot = 5;
-screw_d = 3;
+screw_d = 2;
 
 
 usbc = [9, 4];
