@@ -6,7 +6,6 @@ height = 6 + ws;
 
 side_space = 6;
 slot = 5;
-screw_d = 2;
 
 
 usbc = [9, 4];
@@ -16,7 +15,6 @@ case_dim = [2*ws + width, 2*ws + length, 2*ws + height];
 otherside = case_dim.x + side_space;
 
 slit_d = .8;
-slit_h = case_dim.y - 2*ws;
 h_to_slit_start = .5;
 
 module rpi()
@@ -46,6 +44,7 @@ module case()
 			cylinder(d = screw_d, h = 2 * ws, $fn = 50);
 
 		// cap slit
+		slit_h = case_dim.y - 2*ws;
 		for(x = [ws, otherside - ws])
 		{
 			translate([x, ws, (height + ws) - (h_to_slit_start + slit_d/2) ])
@@ -60,39 +59,40 @@ module upside_deggel()
 	cube([otherside, case_dim.y, ws]);
 	
 	// wiggle-room
-	wg = .5;
+	wg = .55;
 	tab_width = 1;
 	
 	needed_h = h_to_slit_start + slit_d;
+	wanted_w = case_dim.y - (2 * ws + 2*wg);
 	translate([0,0,ws])
 	difference()
 	{
 		union()
 		{
-			translate([ws + wg/2, ws, 0])
-				cube([otherside - 2 * (ws + wg/2), case_dim.y - 2 * ws, needed_h ]);
+			translate([ws + wg/2, ws + wg, 0])
+				cube([otherside - 2 * (ws + wg/2), wanted_w, needed_h ]);
 			
 			// cap slit
 			for(x = [ws + wg/2, otherside - (ws + wg/2)])
 			{
-				translate([x, ws, h_to_slit_start + slit_d / 2])
+				translate([x, ws + wg, h_to_slit_start + slit_d / 2])
 					rotate([-90, 0, 0])
-						cylinder(h = slit_h, d = slit_d, $fn = 8);
+						cylinder(h = wanted_w, d = slit_d, $fn = 8);
 			}
 		}
 		
 
-		translate([ws + tab_width, ws, 0])
-				cube([otherside - 2 * ws - 2 * tab_width, case_dim.y - 2 * ws, needed_h + 1 ]);
+		#translate([ws + tab_width, ws + wg, 0])
+				cube([otherside - 2 * ws - 2 * tab_width, wanted_w , needed_h + 1 ]);
 	}
 }
 
 module deggel()
 {
-	mirror([0,0,1]) upside_deggel();
+	mirror([0,0,1]) !upside_deggel();
 }
 
-!case();
+case();
 
 translate([0,0,case_dim.z + 10])
 	deggel();
