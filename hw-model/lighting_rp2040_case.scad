@@ -6,6 +6,7 @@ height = 6 + ws;
 
 side_space = 6;
 slot = 5;
+screw_d = 3;
 
 usbc = [9, 4];
 
@@ -30,10 +31,14 @@ module case()
 		// extra space
 		translate([(otherside - width) - ws, (case_dim.y - length) / 2, (case_dim.z - height) / 2])
 			cube([width, length, height]);
-		
+
 		// slot
 		translate([otherside - ws - 1, (case_dim.y - slot) / 2, ws])
-			#cube([ws + 2, slot, height]);
+			cube([ws + 2, slot, height]);
+
+		// screw hole
+		#translate([case_dim.x, side_space, -.1])
+			cylinder(d = screw_d, h = 2 * ws, $fn = 50);
 	}
 }
 
@@ -42,7 +47,7 @@ module deggel()
 	cube([otherside, case_dim.y, ws]);
 }
 
-case();
+!case();
 
 translate([0,0,case_dim.z])
 	deggel();
