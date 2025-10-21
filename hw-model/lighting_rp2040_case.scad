@@ -6,7 +6,7 @@ height = 6 + ws;
 
 side_space = 6;
 slot = 5;
-
+screw_d = 2;
 
 usbc = [9, 4];
 
@@ -89,10 +89,10 @@ module upside_deggel()
 
 module deggel()
 {
-	mirror([0,0,1]) !upside_deggel();
+	mirror([0,0,1]) upside_deggel();
 }
 
-case();
+!case();
 
 translate([0,0,case_dim.z + 10])
 	deggel();
