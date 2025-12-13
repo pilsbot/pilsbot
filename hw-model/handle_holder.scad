@@ -7,13 +7,18 @@ absatz_h = tube_d/3;
 screw_d = 4;
 screw_konus = 3;
 
-
 holder_d = 2*tube_d+ws;
+extra_base = sdriver_clearance * 1.5;
+
+
+holder_width = holder_d + extra_base * 2;
 $fn = $preview ? 80 : 200;
 
 module holder() {
-	rotate([90, 0, 0]) linear_extrude(breite) difference(){
-		circle(d = holder_d);
+	rotate([90, 0, 0]) linear_extrude(breite, convexity = 2) difference(){
+		
+		resize([holder_width, holder_d])
+			circle(d = holder_d);
 		
 		extra_w = 1;
 		// round slot for tube
@@ -26,22 +31,33 @@ module holder() {
 		}
 		
 		// cut lower half
-		translate([-(holder_d+1)/2, -(holder_d+1)])
-			square([holder_d+1, holder_d+1,]);
+		weg = holder_width + 1;
+		translate([-weg /2, -weg ])
+			square([weg , weg]);
 	}
 }
 
+
+module screw_hole()
+{
+	translate([0,0, absatz_h])
+		cylinder(d1=sdriver_clearance-1, d2=sdriver_clearance+2, h=holder_d/2-absatz_h);
+	translate([0,0, absatz_h-screw_konus])
+		cylinder(d1=screw_d, d2=screw_d+screw_konus, h=screw_konus);
+	cylinder(d=screw_d, h=holder_d/2);
+}
 
 
 difference(){
 	holder();
 	
 	//the screw hole
-	translate([-(holder_d-breite)/2, -breite/2,0]){
-		translate([0,0, absatz_h])
-			cylinder(d1=sdriver_clearance-1, d2=sdriver_clearance+3, h=holder_d/2-absatz_h);
-		translate([0,0, absatz_h-screw_konus])
-			cylinder(d1=screw_d, d2=screw_d+screw_konus, h=screw_konus);
-		cylinder(d=screw_d, h=100);
+	translate([0, -breite/2, 0])
+	{
+		translate([-(holder_d-breite)/2, 0,0])
+			screw_hole();
+		translate([-(holder_width-breite)/2, 0,0])
+			screw_hole();
 	}
+
 }
