@@ -13,3 +13,6 @@
 [submodule "pcb/overvoltage_protection"]
 	path = pcb/overvoltage_protection
 	url = https://github.com/pilsbot/overvoltage_protection
+[submodule "sw/indicators"]
+	path = sw/indicators
+	url = git@github.com:pilsbot/indicators
